@@ -61,6 +61,20 @@
         map: null,
       }
     },
+    created(){
+      // 百度坐标转换魏高德坐标
+      // TODO； 此方法存在偏差，仅供参考
+      let data = '121.5295289240408,31.23483346628721'
+      const newData = data.split(',');
+      const bd_lat = newData[0], bd_lon = newData[1]
+      const PI = 3.14159265358979324 * 3000.0 / 180.0;
+      const x = bd_lon - 0.0065, y = bd_lat - 0.006;
+      const z = Math.sqrt(x*x + y*y) - 0.00002 * Math.sin(y*PI);
+      const theta = Math.atan2(y,x) - 0.000003 * Math.cos(x*PI);
+      const gd_lat_lon_X = z*Math.sin(theta);
+      const gd_lat_lon_Y = z*Math.cos(theta);
+      console.log(gd_lat_lon_X, gd_lat_lon_Y)
+    },
     mounted() {
       let vue = this;
       // 模拟假数据
@@ -72,6 +86,8 @@
         {name: '上海龙之梦',  type: '3', status: 1, position: [121.41714,31.218751]}
       ]
       initAMap(mapData);
+    },
+    methods:{
 
     }
   }
