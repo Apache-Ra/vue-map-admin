@@ -18,7 +18,8 @@
       // 置地图级别，级别为数字  PC上，参数zoom可设范围：[3,18]；  移动端：参数zoom可设范围：[3,19]
       map.setZoom(18);
       // 地图多维度撒点
-      mapDistributed(map,mapData)
+      mapDistributed(map,mapData);
+
     }, e => {
       console.log('地图加载失败', e);
     })
@@ -36,17 +37,22 @@
         position: [item.position[0], item.position[1]]
       });
       // 图表信息带入方法
-      marker.item = item
+      marker.item = item;
+      marker.map = map;
+      // 点位触发事件
       marker.on('click', markerClick);
     })
   }
   // 坐标点的点击事件
   const markerClick = (e) =>{
-    console.log(e.target.item);
+    new AMap.InfoWindow({
+      content:e.target.item.name,
+    }).open(e.target.map,e.lnglat)
   }
 
   // 自定义信息化窗体
   const customizeForm = () =>{
+
   }
   export default {
     name: "home",
@@ -62,18 +68,6 @@
       }
     },
     created(){
-      // 百度坐标转换魏高德坐标
-      // TODO； 此方法存在偏差，仅供参考
-      let data = '121.5295289240408,31.23483346628721'
-      const newData = data.split(',');
-      const bd_lat = newData[0], bd_lon = newData[1]
-      const PI = 3.14159265358979324 * 3000.0 / 180.0;
-      const x = bd_lon - 0.0065, y = bd_lat - 0.006;
-      const z = Math.sqrt(x*x + y*y) - 0.00002 * Math.sin(y*PI);
-      const theta = Math.atan2(y,x) - 0.000003 * Math.cos(x*PI);
-      const gd_lat_lon_X = z*Math.sin(theta);
-      const gd_lat_lon_Y = z*Math.cos(theta);
-      console.log(gd_lat_lon_X, gd_lat_lon_Y)
     },
     mounted() {
       let vue = this;
